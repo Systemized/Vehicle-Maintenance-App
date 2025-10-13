@@ -1,7 +1,7 @@
 # Vehicle Maintenance App
 
-A Flutter project for Mobile App Development.
+A Flutter project for CSC 4360/6360.
 
-#### Cotributors:
+#### Contributors:
 - [Systemized](https://github.com/systemized)
 - [Pjasmat](https://github.com/pjasmat)
