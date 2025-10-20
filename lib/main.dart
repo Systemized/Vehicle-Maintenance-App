@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'pages/home_page.dart';
+import 'pages/new_vehicle_page.dart';
+import 'pages/reminders_page.dart';
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BottomNavExample(),
-    );
+    return const MaterialApp(home: VehicleMaintenanceApp());
   }
 }
 
-class BottomNavExample extends StatefulWidget {
-  const BottomNavExample({super.key});
+class VehicleMaintenanceApp extends StatefulWidget {
+  const VehicleMaintenanceApp({super.key});
 
   @override
-  State<BottomNavExample> createState() => _BottomNavExampleState();
+  State<VehicleMaintenanceApp> createState() => _VehicleMaintenanceAppState();
 }
 
-class _BottomNavExampleState extends State<BottomNavExample> {
+class _VehicleMaintenanceAppState extends State<VehicleMaintenanceApp> {
   int _selectedIndex = 0;
-
   static const List<Widget> _pages = <Widget>[
-    Center(child: Text('Home Page', style: TextStyle(fontSize: 25))),
-    Center(child: Text('Add Vehicle Page', style: TextStyle(fontSize: 25))),
-    Center(child: Text('Reminders Page', style: TextStyle(fontSize: 25))),
+    HomePage(),
+    NewVehiclePage(),
+    RemindersPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -41,8 +39,8 @@ class _BottomNavExampleState extends State<BottomNavExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Bottom Navigation Example')),
-      body: _pages[_selectedIndex],
+      appBar: AppBar(title: const Text('Vehicle Maintenance App')),
+      body: Center(child: _pages.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -50,7 +48,7 @@ class _BottomNavExampleState extends State<BottomNavExample> {
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Reminders'),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
     );
