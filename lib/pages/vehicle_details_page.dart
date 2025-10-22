@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../database/database_helper.dart';
 import '../database/models/vehicle.dart';
+import 'maintenance_log_page.dart';
+import 'ai_suggestions_page.dart';
 
 class VehicleDetailsPage extends StatefulWidget {
   final Vehicle vehicle;
@@ -174,30 +176,75 @@ class _VehicleDetailsPageState extends State<VehicleDetailsPage> {
             
             const SizedBox(height: 24),
             
-            // Update Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.blue[400],
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: _isLoading ? null : _updateVehicle,
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            // Action Buttons
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: Colors.green[400],
+                          foregroundColor: Colors.white,
                         ),
-                      )
-                    : const Text(
-                        'Update Vehicle',
-                        style: TextStyle(fontSize: 16),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MaintenanceLogPage(vehicle: widget.vehicle),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.build),
+                        label: const Text('Maintenance Log'),
                       ),
-              ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: Colors.purple[400],
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AISuggestionsPage(vehicle: widget.vehicle),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.psychology),
+                        label: const Text('AI Suggestions'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.blue[400],
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: _isLoading ? null : _updateVehicle,
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text('Update Vehicle'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

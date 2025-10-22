@@ -57,6 +57,46 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _deleteVehicle(Vehicle vehicle) async {
+    final bool? shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Vehicle'),
+          content: Text('Are you sure you want to delete ${vehicle.year} ${vehicle.make} ${vehicle.model}? This will also delete all associated maintenance records and reminders.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete == true) {
+      try {
+        await _dbHelper.deleteVehicle(vehicle.id!);
+        _loadVehicles();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Vehicle deleted successfully')),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error deleting vehicle: $e')),
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -129,7 +169,26 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                              PopupMenuButton<String>(
+                                onSelected: (value) {
+                                  if (value == 'delete') {
+                                    _deleteVehicle(vehicle);
+                                  }
+                                },
+                                itemBuilder: (BuildContext context) => [
+                                  const PopupMenuItem<String>(
+                                    value: 'delete',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.delete, color: Colors.red),
+                                        SizedBox(width: 8),
+                                        Text('Delete Vehicle'),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                child: const Icon(Icons.more_vert, color: Colors.grey),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
