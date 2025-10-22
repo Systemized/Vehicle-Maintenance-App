@@ -4,7 +4,7 @@ class Vehicle {
   final String make;
   final String model;
   final String year;
-  final String engine;
+  final String car;
   final String createdAt;
 
   Vehicle({
@@ -13,7 +13,7 @@ class Vehicle {
     required this.make, 
     required this.model, 
     required this.year, 
-    required this.engine,
+    required this.car,
     required this.createdAt,
   });
 
@@ -24,7 +24,7 @@ class Vehicle {
       'make': make,
       'model': model,
       'year': year,
-      'engine': engine,
+      'car': car,
       'createdAt': createdAt,
     };
   }
@@ -36,7 +36,7 @@ class Vehicle {
       make: map['make'],
       model: map['model'],
       year: map['year'],
-      engine: map['engine'],
+      car: map['car'],
       createdAt: map['createdAt'],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:path/path.dart';		
 import 'package:sqflite/sqflite.dart';	
-import 'package:path_provider/path_provider.dart';
 import 'models/vehicle.dart';
 
 class DatabaseHelper {	
@@ -14,15 +13,15 @@ class DatabaseHelper {
   static const columnMake = 'make';
   static const columnModel = 'model';
   static const columnYear = 'year';
-  static const columnEngine = 'engine';
+  static const columnCar = 'car';
   static const columnCreatedAt = 'createdAt';
 
   late Database _db;	
 
   // this opens the database (and creates it if it doesn't exist)	
   Future<void> init() async {	
-    final documentsDirectory = await getApplicationDocumentsDirectory();	
-    final path = join(documentsDirectory.path, _databaseName);	
+    final databasesPath = await getDatabasesPath();	
+    final path = join(databasesPath, _databaseName);	
     _db = await openDatabase(	
       path,	
       version: _databaseVersion,	
@@ -39,7 +38,7 @@ class DatabaseHelper {
             $columnMake TEXT NOT NULL,
             $columnModel TEXT NOT NULL,
             $columnYear TEXT NOT NULL,
-            $columnEngine TEXT NOT NULL,
+            $columnCar TEXT NOT NULL,
             $columnCreatedAt TEXT NOT NULL
           )	
           ''');	
