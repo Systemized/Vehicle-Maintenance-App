@@ -5,6 +5,8 @@ class Vehicle {
   final String model;
   final String year;
   final String car;
+  final String? mileage;
+  final String? lastMaintenanceService;
   final String createdAt;
 
   Vehicle({
@@ -14,6 +16,8 @@ class Vehicle {
     required this.model, 
     required this.year, 
     required this.car,
+    this.mileage,
+    this.lastMaintenanceService,
     required this.createdAt,
   });
 
@@ -25,6 +29,8 @@ class Vehicle {
       'model': model,
       'year': year,
       'car': car,
+      'mileage': mileage,
+      'lastMaintenanceService': lastMaintenanceService,
       'createdAt': createdAt,
     };
   }
@@ -37,6 +43,8 @@ class Vehicle {
       model: map['model'],
       year: map['year'],
       car: map['car'],
+      mileage: map['mileage'],
+      lastMaintenanceService: map['lastMaintenanceService'],
       createdAt: map['createdAt'],
     );
   }

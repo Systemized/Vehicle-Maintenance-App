@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import '../database/models/vehicle.dart';
+import 'vehicle_details_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,6 +38,22 @@ class _HomePageState extends State<HomePage> {
           SnackBar(content: Text('Error loading vehicles: $e')),
         );
       }
+    }
+  }
+
+  Future<void> _navigateToVehicleDetails(Vehicle vehicle) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute<String>(
+        builder: (context) => VehicleDetailsPage(vehicle: vehicle),
+      ),
+    );
+
+    if (!context.mounted) return;
+
+    // If the vehicle was updated, reload the list
+    if (result == 'updated') {
+      _loadVehicles();
     }
   }
 
@@ -91,51 +108,100 @@ class _HomePageState extends State<HomePage> {
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
                   elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.directions_car, size: 24),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                '${vehicle.year} ${vehicle.make} ${vehicle.model}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                  child: InkWell(
+                    onTap: () => _navigateToVehicleDetails(vehicle),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.directions_car, size: 24),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  '${vehicle.year} ${vehicle.make} ${vehicle.model}',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
+                              ),
+                              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'VIN: ${vehicle.vin}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                          if (vehicle.car.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              'Type: ${vehicle.car}',
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
+                          const SizedBox(height: 8),
+                          if (vehicle.mileage != null || vehicle.lastMaintenanceService != null) ...[
+                            Row(
+                              children: [
+                                if (vehicle.mileage != null) ...[
+                                  Icon(Icons.speed, size: 16, color: Colors.blue[400]),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'Mileage: ${vehicle.mileage}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.blue[400],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                ],
+                                if (vehicle.lastMaintenanceService != null) ...[
+                                  Icon(Icons.build, size: 16, color: Colors.orange[400]),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      'Last Service: ${vehicle.lastMaintenanceService}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.orange[400],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ] else ...[
+                            const Text(
+                              'Tap to add mileage and maintenance details',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic,
                               ),
                             ),
                           ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'VIN: ${vehicle.vin}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                            fontFamily: 'monospace',
-                          ),
-                        ),
-                        if (vehicle.car.isNotEmpty) ...[
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 8),
                           Text(
-                            'Type: ${vehicle.car}',
-                            style: const TextStyle(fontSize: 14),
+                            'Added: ${_formatDate(vehicle.createdAt)}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
-                        const SizedBox(height: 8),
-                        Text(
-                          'Added: ${_formatDate(vehicle.createdAt)}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );

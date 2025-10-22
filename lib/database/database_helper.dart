@@ -4,7 +4,7 @@ import 'models/vehicle.dart';
 
 class DatabaseHelper {	
   static const _databaseName = "VehicleDatabase.db";	
-  static const _databaseVersion = 1;	
+  static const _databaseVersion = 2;	
 
   static const table = 'vehicles';	
 
@@ -14,6 +14,8 @@ class DatabaseHelper {
   static const columnModel = 'model';
   static const columnYear = 'year';
   static const columnCar = 'car';
+  static const columnMileage = 'mileage';
+  static const columnLastMaintenanceService = 'lastMaintenanceService';
   static const columnCreatedAt = 'createdAt';
 
   late Database _db;	
@@ -26,6 +28,7 @@ class DatabaseHelper {
       path,	
       version: _databaseVersion,	
       onCreate: _onCreate,	
+      onUpgrade: _onUpgrade,
     );	
   }	
 
@@ -39,10 +42,21 @@ class DatabaseHelper {
             $columnModel TEXT NOT NULL,
             $columnYear TEXT NOT NULL,
             $columnCar TEXT NOT NULL,
+            $columnMileage TEXT,
+            $columnLastMaintenanceService TEXT,
             $columnCreatedAt TEXT NOT NULL
           )	
           ''');	
   }	
+
+  // Database migration when version changes
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add new columns for mileage and lastMaintenanceService
+      await db.execute('ALTER TABLE $table ADD COLUMN $columnMileage TEXT');
+      await db.execute('ALTER TABLE $table ADD COLUMN $columnLastMaintenanceService TEXT');
+    }
+  }
 
   // Helper methods	
 
