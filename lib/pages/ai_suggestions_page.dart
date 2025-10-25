@@ -72,7 +72,7 @@ class _AISuggestionsPageState extends State<AISuggestionsPage> {
                             Icon(Icons.psychology, color: Colors.purple[600], size: 24),
                             const SizedBox(width: 8),
                             const Text(
-                              'AI-Powered Maintenance Suggestions',
+                              'AI Maintenance Suggestions',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

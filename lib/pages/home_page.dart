@@ -100,174 +100,183 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    if (_vehicles.isEmpty) {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.directions_car_outlined,
-              size: 80,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'No vehicles added yet',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Add a vehicle using the VIN number',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
+      return Container(
+        color: Colors.blue[50],
+        child: const Center(
+          child: CircularProgressIndicator(),
         ),
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Your Vehicles',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+    if (_vehicles.isEmpty) {
+      return Container(
+        color: Colors.blue[50],
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.directions_car_outlined,
+                size: 80,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'No vehicles added yet',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Add a vehicle using the VIN number',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _vehicles.length,
-              itemBuilder: (context, index) {
-                final vehicle = _vehicles[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  elevation: 4,
-                  child: InkWell(
-                    onTap: () => _navigateToVehicleDetails(vehicle),
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.directions_car, size: 24),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  '${vehicle.year} ${vehicle.make} ${vehicle.model}',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              PopupMenuButton<String>(
-                                onSelected: (value) {
-                                  if (value == 'delete') {
-                                    _deleteVehicle(vehicle);
-                                  }
-                                },
-                                itemBuilder: (BuildContext context) => [
-                                  const PopupMenuItem<String>(
-                                    value: 'delete',
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.delete, color: Colors.red),
-                                        SizedBox(width: 8),
-                                        Text('Delete Vehicle'),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                                child: const Icon(Icons.more_vert, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'VIN: ${vehicle.vin}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                          if (vehicle.car.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              'Type: ${vehicle.car}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                          const SizedBox(height: 8),
-                          if (vehicle.mileage != null || vehicle.lastMaintenanceService != null) ...[
+        ),
+      );
+    }
+
+    return Container(
+      color: Colors.blue[50],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Your Vehicles',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _vehicles.length,
+                itemBuilder: (context, index) {
+                  final vehicle = _vehicles[index];
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    elevation: 4,
+                    child: InkWell(
+                      onTap: () => _navigateToVehicleDetails(vehicle),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Row(
                               children: [
-                                if (vehicle.mileage != null) ...[
-                                  Icon(Icons.speed, size: 16, color: Colors.blue[400]),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    'Mileage: ${vehicle.mileage}',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.blue[400],
-                                      fontWeight: FontWeight.w500,
+                                const Icon(Icons.directions_car, size: 24),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    '${vehicle.year} ${vehicle.make} ${vehicle.model}',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
-                                ],
-                                if (vehicle.lastMaintenanceService != null) ...[
-                                  Icon(Icons.build, size: 16, color: Colors.orange[400]),
-                                  const SizedBox(width: 4),
-                                  Expanded(
-                                    child: Text(
-                                      'Last Service: ${vehicle.lastMaintenanceService}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.orange[400],
-                                        fontWeight: FontWeight.w500,
+                                ),
+                                PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    if (value == 'delete') {
+                                      _deleteVehicle(vehicle);
+                                    }
+                                  },
+                                  itemBuilder: (BuildContext context) => [
+                                    const PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.delete, color: Colors.red),
+                                          SizedBox(width: 8),
+                                          Text('Delete Vehicle'),
+                                        ],
                                       ),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                  child: const Icon(Icons.more_vert, color: Colors.grey),
+                                ),
                               ],
                             ),
-                          ] else ...[
-                            const Text(
-                              'Tap to add mileage and maintenance details',
-                              style: TextStyle(
+                            const SizedBox(height: 8),
+                            Text(
+                              'VIN: ${vehicle.vin}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                            if (vehicle.car.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              Text(
+                                'Type: ${vehicle.car}',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ],
+                            const SizedBox(height: 8),
+                            if (vehicle.mileage != null || vehicle.lastMaintenanceService != null) ...[
+                              Row(
+                                children: [
+                                  if (vehicle.mileage != null) ...[
+                                    Icon(Icons.speed, size: 16, color: Colors.blue[400]),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Mileage: ${vehicle.mileage}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blue[400],
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                  ],
+                                  if (vehicle.lastMaintenanceService != null) ...[
+                                    Icon(Icons.build, size: 16, color: Colors.orange[400]),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: Text(
+                                        'Last Service: ${vehicle.lastMaintenanceService}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.orange[400],
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ] else ...[
+                              const Text(
+                                'Tap to add mileage and maintenance details',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 8),
+                            Text(
+                              'Added: ${_formatDate(vehicle.createdAt)}',
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
-                                fontStyle: FontStyle.italic,
                               ),
                             ),
                           ],
-                          const SizedBox(height: 8),
-                          Text(
-                            'Added: ${_formatDate(vehicle.createdAt)}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

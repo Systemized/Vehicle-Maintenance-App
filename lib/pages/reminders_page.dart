@@ -276,13 +276,16 @@ class _RemindersPageState extends State<RemindersPage> {
                           children: [
                             Icon(Icons.directions_car, size: 14, color: Colors.grey[600]),
                             const SizedBox(width: 4),
-                            Text(
-                              vehicle != null
-                                  ? '${vehicle.year} ${vehicle.make} ${vehicle.model}'
-                                  : 'Unknown Vehicle',
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            Expanded(
+                              child: Text(
+                                vehicle != null
+                                    ? '${vehicle.year} ${vehicle.make} ${vehicle.model}'
+                                    : 'Unknown Vehicle',
+                                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            const SizedBox(width: 16),
+                            const SizedBox(width: 8),
                             Icon(Icons.calendar_today, size: 14, color: Colors.grey[600]),
                             const SizedBox(width: 4),
                             Text(
